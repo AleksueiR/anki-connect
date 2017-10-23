@@ -217,7 +217,9 @@ class AjaxServer:
     def resetHeaders(self):
         self.headers = [
             ['HTTP/1.1 200 OK', None],
-            ['Content-Type', 'text/json']
+            ['Content-Type', 'text/json'],
+            ['Access-Control-Allow-Origin', '*'],
+            ['Access-Control-Allow-Headers', 'Content-Type']
         ]
         self.extraHeaders = {}
 
@@ -688,6 +690,13 @@ class AnkiBridge:
             return []
 
 
+    def getNote(self, id=None):
+        if id is not None:
+            return self.collection().getNote(id).fields
+        else:
+            return {}
+
+
     def findCards(self, query=None):
         if query is not None:
             return self.collection().findCards(query)
@@ -1100,6 +1109,11 @@ class AnkiConnect:
     @webApi()
     def findNotes(self, query=None):
         return self.anki.findNotes(query)
+
+
+    @webApi()
+    def getNote(self, id=None):
+        return self.anki.getNote(id)
 
 
     @webApi()
